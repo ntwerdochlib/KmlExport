@@ -1,0 +1,13 @@
+[submodule "3rdparty/pugixml"]
+	path = 3rdparty/pugixml
+	url = https://github.com/zeux/pugixml.git
+[submodule "3rdparty/tclap/tclap"]
+	path = 3rdparty/tclap/tclap
+	url = https://github.com/mirror/tclap.git
+	branch = 1.4
+[submodule "3rdparty/html-parser/html-parser"]
+	path = 3rdparty/html-parser/html-parser
+	url = https://github.com/Chi-EEE/html-parser.git
+[submodule "3rdparty/KZip/KZip"]
+	path = 3rdparty/KZip/KZip
+	url = https://github.com/troldal/KZip.git

@@ -1,0 +1,157 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 14030ce..a02bedf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,18 +10,21 @@ project(html-parser LANGUAGES CXX C)
+ # target
+ add_library(html-parser STATIC "")
+ set_target_properties(html-parser PROPERTIES OUTPUT_NAME "html-parser")
++if (MSVC)
+ set_target_properties(html-parser PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/windows/x64/release")
++endif ()
++
+ target_include_directories(html-parser PRIVATE
+-    include
+-    include/html-parser
++    ${CMAKE_CURRENT_SOURCE_DIR}/include
++    ${CMAKE_CURRENT_SOURCE_DIR}/include/html-parser
+ )
+ target_include_directories(html-parser INTERFACE
+-    include
++    ${CMAKE_CURRENT_SOURCE_DIR}/include
+ )
+ if(MSVC)
+     target_compile_options(html-parser PRIVATE /EHsc)
+ else()
+-    target_compile_options(html-parser PRIVATE -fcxx-exceptions)
++    #target_compile_options(html-parser PRIVATE -fcxx-exceptions)
+ endif()
+ set_target_properties(html-parser PROPERTIES CXX_EXTENSIONS OFF)
+ target_compile_features(html-parser PRIVATE cxx_std_17)
+diff --git a/include/html-parser/ArgumentParser.h b/include/html-parser/ArgumentParser.h
+index a7daec3..071360b 100644
+--- a/include/html-parser/ArgumentParser.h
++++ b/include/html-parser/ArgumentParser.h
+@@ -8,8 +8,6 @@
+ #include <functional>
+ #include <optional>
+ 
+-#include "macros.h"
+-
+ namespace html_parser {
+ 	class ArgumentParser
+ 	{
+diff --git a/include/html-parser/DOMBuilder.h b/include/html-parser/DOMBuilder.h
+index 2f66ae9..7fc2bc0 100644
+--- a/include/html-parser/DOMBuilder.h
++++ b/include/html-parser/DOMBuilder.h
+@@ -2,7 +2,6 @@
+ #define _MENCI_HTML_PARSER_DOMBUILDER_H
+ 
+ #include <string>
+-#include "macros.h"
+ 
+ #include "Token.h"
+ #include "DOM.h"
+diff --git a/include/html-parser/HTMLDocument.h b/include/html-parser/HTMLDocument.h
+index 43cce36..c077edf 100644
+--- a/include/html-parser/HTMLDocument.h
++++ b/include/html-parser/HTMLDocument.h
+@@ -6,7 +6,7 @@
+ #include <type_traits>
+ #include <string>
+ 
+-#include "macros.h"
++//#include "macros.h"
+ 
+ #include "Lexer.h"
+ #include "DOM.h"
+@@ -101,7 +101,7 @@ namespace html_parser {
+ 				return this->node->idList;
+ 			}
+ 
+-			std::string getTagName()
++			std::string getTagName() const
+ 			{
+ 				return this->node->tagName;
+ 			}
+diff --git a/include/html-parser/Lexer.h b/include/html-parser/Lexer.h
+index cd90577..d7809a3 100644
+--- a/include/html-parser/Lexer.h
++++ b/include/html-parser/Lexer.h
+@@ -3,7 +3,6 @@
+ 
+ #include <vector>
+ #include <string>
+-#include "macros.h"
+ 
+ #include "Token.h"
+ 
+diff --git a/src/ArgumentParser.cc b/src/ArgumentParser.cc
+index 4c4e455..46a4147 100755
+--- a/src/ArgumentParser.cc
++++ b/src/ArgumentParser.cc
+@@ -1,5 +1,7 @@
+ #include "ArgumentParser.h"
+ 
++#include "macros.h"
++
+ namespace html_parser {
+ 	ArgumentParser& ArgumentParser::setProgramDescription(const std::string& programDescription)
+ 	{
+@@ -236,7 +238,7 @@ namespace html_parser {
+ 					}
+ 
+ 					auto it = mapNameArgument.find(name.substr(2));
+-					if (mapNameArgument.end().operator==(it))
++					if (mapNameArgument.end()==(it))
+ 					{
+ 						raiseError("Unknown option: " + name + '.');
+ 					}
+@@ -253,7 +255,7 @@ namespace html_parser {
+ 					}
+ 
+ 					auto it = mapAliasArgument.find(name.substr(1));
+-					if (mapAliasArgument.end().operator==(it))
++					if (mapAliasArgument.end()==(it))
+ 					{
+ 						raiseError("Unknown option: " + name + '.');
+ 					}
+diff --git a/src/DOMBuilder.cc b/src/DOMBuilder.cc
+index 887602f..6b88eec 100755
+--- a/src/DOMBuilder.cc
++++ b/src/DOMBuilder.cc
+@@ -2,6 +2,8 @@
+ 
+ #include "HTMLEntities.h"
+ 
++#include "macros.h"
++
+ namespace html_parser {
+ 	// These elements' open tags don't need close tags and they don't have a subtree.
+ 	// From https://developer.mozilla.org/en-US/docs/Glossary/Empty_element.
+diff --git a/src/HTMLDocument.cc b/src/HTMLDocument.cc
+index fae3468..0b7a1fa 100755
+--- a/src/HTMLDocument.cc
++++ b/src/HTMLDocument.cc
+@@ -1,5 +1,7 @@
+ #include "HTMLDocument.h"
+ 
++#include "macros.h"
++
+ #include <exception>
+ 
+ namespace html_parser {
+diff --git a/src/Lexer.cc b/src/Lexer.cc
+index a8aca7d..3df6dfe 100755
+--- a/src/Lexer.cc
++++ b/src/Lexer.cc
+@@ -3,6 +3,8 @@
+ #include <iostream>
+ #include <string>
+ 
++#include "macros.h"
++
+ namespace html_parser {
+ 	std::vector<Token> getTokens(const std::string& htmlContents)
+ 	{
