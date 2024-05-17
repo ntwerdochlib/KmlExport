@@ -22,12 +22,8 @@ int main(int argc, char* argv[])
 	try {
 		KmlDumper kd(filename.getValue());
 
-		kd.test();
-
-		return 0;
-
 		auto f = kd.load(folderName.getValue());
- 
+
 		if (!f.placemarks.empty()) {
 			auto const outFile = folderName.getValue()+".csv";
 			std::fstream out(outFile, std::fstream::out);
@@ -42,25 +38,30 @@ int main(int argc, char* argv[])
 				out << *it;
 				std::ranges::for_each(std::next(it), cend(f.fields), [&out](auto const& p) { out << ',' << p; });
 			}
+			{
+				auto const it = cbegin(f.variableFields);
+				out << *it;
+				std::ranges::for_each(std::next(it), cend(f.variableFields), [&out](auto const& p) { out << ',' << p; });
+			}
 			out << std::endl;
 
 			for (auto&& p : f.placemarks) {
-				out << p.id << "," << p.name <<
+				out << p.id << ',' << std::quoted(p.name) << 
 					"," << p.coordinates.latitude <<
 					"," << p.coordinates.longitude <<
 					"," << p.coordinates.elevation << ",";
 
-				{
-					auto const it = cbegin(p.details);
-					out << it->second;
-					std::ranges::for_each(std::next(it), cend(p.details), [&out](auto const& p) { out << ',' << p.second; });
+				for (auto const& variableField : f.variableFields) {
+					out << ',';
+					if (auto const& it = p.variableData.find(variableField); it != end(p.variableData)) {
+						out << std::quoted(it->second);
+					}
 				}
-
 				out << std::endl;
 			}
 		}	
 	} catch (std::exception const& e) {
-		std::cerr << "Exception: " << e.what() << std::endl;
+		std::cerr << __func__ << ": Exception: " << e.what() << std::endl;
 	}
 
 	return 0;
