@@ -1,4 +1,4 @@
-#include "KmlDumper.h"
+#include "KmlExport.h"
 
 #include <array>
 #include <algorithm>
@@ -36,11 +36,11 @@ std::string trim(std::string_view const str)
 
 }
 
-KmlDumper::KmlDumper(const std::string &filename)
+KmlExport::KmlExport(const std::string &filename)
 	: m_filename(filename)
 {}
 
-Folder KmlDumper::load(const std::string& folderName) {
+Folder KmlExport::load(const std::string& folderName) {
   if (!loadFile()) {
     throw std::runtime_error("failed to load " + m_filename);
   }
@@ -185,7 +185,7 @@ Folder KmlDumper::load(const std::string& folderName) {
   }
 }
 
-bool KmlDumper::loadFile()
+bool KmlExport::loadFile()
 {
   std::filesystem::path path = m_filename;
   if (path.extension() == ".kmz") {
@@ -194,7 +194,7 @@ bool KmlDumper::loadFile()
   return loadKML();
 }
 
-bool KmlDumper::loadKML()
+bool KmlExport::loadKML()
 {
   auto result = m_doc.load_file(m_filename.c_str());
   if (!result) {
@@ -203,7 +203,7 @@ bool KmlDumper::loadKML()
   return true;
 }
 
-bool KmlDumper::loadKMZ()
+bool KmlExport::loadKMZ()
 {
   KZip::ZipArchive arch;
   arch.open(m_filename);

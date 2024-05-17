@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(KmlDumper)
+project(KmlExport)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,8 +12,8 @@ add_subdirectory(3rdparty/KZip)
 add_subdirectory(3rdparty/tclap)
 
 add_executable(${PROJECT_NAME}
-	KmlDumper.h
-	KmlDumper.cpp
+	KmlExport.h
+	KmlExport.cpp
 	main.cpp
 )
 

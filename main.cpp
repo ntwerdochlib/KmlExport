@@ -9,18 +9,18 @@
 #include "tclap/CmdLine.h"
 #include "KZip.hpp"
 
-#include "KmlDumper.h"
+#include "KmlExport.h"
 
 int main(int argc, char* argv[])
 {
-	TCLAP::CmdLine cmd("KmlDumper", ' ', "1.0.0");
+	TCLAP::CmdLine cmd("KmlExport", ' ', "1.0.0");
 	TCLAP::UnlabeledValueArg<std::string> filename("file", "KML/KMZ file to process", true, "", "string", cmd);
 	TCLAP::UnlabeledValueArg<std::string> folderName("folder", "Folder name to dump from the KML file", false, "", "string", cmd);
 
 	cmd.parse(argc, argv);
 
 	try {
-		KmlDumper kd(filename.getValue());
+		KmlExport kd(filename.getValue());
 
 		auto f = kd.load(folderName.getValue());
 

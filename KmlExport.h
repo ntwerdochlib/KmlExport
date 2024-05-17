@@ -32,20 +32,20 @@ struct Folder
 	std::vector<Placemark> placemarks;
 };
 
-class KmlDumper
+class KmlExport
 {
 public:
-	KmlDumper() = default;
+	KmlExport() = default;
 
-	KmlDumper(const std::string &filename);
+	KmlExport(const std::string &filename);
 
-	KmlDumper(const KmlDumper &) = delete;
-	KmlDumper(KmlDumper &&) = delete;
+	KmlExport(const KmlExport &) = delete;
+	KmlExport(KmlExport &&) = delete;
 
-	~KmlDumper() = default;
+	~KmlExport() = default;
 
-	KmlDumper &operator=(const KmlDumper &) = delete;
-	KmlDumper &operator=(KmlDumper &&) = delete;
+	KmlExport &operator=(const KmlExport &) = delete;
+	KmlExport &operator=(KmlExport &&) = delete;
 
 	Folder load(const std::string& folderName = {});
 
